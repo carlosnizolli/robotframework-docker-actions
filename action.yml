@@ -23,7 +23,7 @@ inputs:
     required: false
     default: ""
   threads:
-    description: "ROBOT_THREADS — 1 uses robot, >1 uses pabot"
+    description: "ROBOT_THREADS — 1 uses robot; >1 uses pabot (discouraged)"
     required: false
     default: "1"
   listener:
@@ -31,7 +31,7 @@ inputs:
     required: false
     default: ""
   pabot_options:
-    description: "Extra Pabot options (PABOT_OPTIONS) when threads > 1"
+    description: "Extra Pabot options (PABOT_OPTIONS) when threads > 1 (discouraged)"
     required: false
     default: ""
   shm_size:
