@@ -7,7 +7,7 @@ Marketplace: [Robot Framework Docker](https://github.com/marketplace/actions/rob
 
 ## Usage
 
-Use a **release tag** that exists on this repository (ex.: `v1.0.2`).  
+Use a **release tag** that exists on this repository (ex.: `v1.0.1`).  
 There is no floating `v1` tag unless you create one (see [Publish](#publish-to-marketplace)).
 
 ```yaml
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Robot Framework
-        uses: carlosnizolli/robotframework-docker-actions@v1.0.2
+        uses: carlosnizolli/robotframework-docker-actions@v1.0.1
         env:
           # Encaminhadas ao container quando definidas (Gemini / robotframework-gemini)
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
