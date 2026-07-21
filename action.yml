@@ -1,0 +1,82 @@
+name: "Robot Framework Docker"
+description: "Run Robot Framework tests using ghcr.io/carlosnizolli/docker-robotframework"
+author: "Carlos Nizolli"
+
+branding:
+  icon: "check-circle"
+  color: "blue"
+
+inputs:
+  image:
+    description: "Docker image (tag recommended for reproducibility)"
+    required: false
+    default: "ghcr.io/carlosnizolli/docker-robotframework:latest"
+  tests_path:
+    description: "Path to tests relative to the GitHub workspace"
+    required: true
+  reports_path:
+    description: "Path for Robot reports relative to the GitHub workspace"
+    required: false
+    default: "reports"
+  options:
+    description: "Extra robot/pabot options (ROBOT_OPTIONS), e.g. --exitonfailure --name CI"
+    required: false
+    default: ""
+  threads:
+    description: "ROBOT_THREADS — 1 uses robot, >1 uses pabot"
+    required: false
+    default: "1"
+  listener:
+    description: "ROBOT_LISTENER — full listener args, e.g. --listener MyListener"
+    required: false
+    default: ""
+  pabot_options:
+    description: "Extra Pabot options (PABOT_OPTIONS) when threads > 1"
+    required: false
+    default: ""
+  shm_size:
+    description: "Docker --shm-size (browsers often need 1g+)"
+    required: false
+    default: "2g"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare reports directory
+      shell: bash
+      env:
+        WORKSPACE: ${{ github.workspace }}
+        REPORTS_PATH: ${{ inputs.reports_path }}
+      run: |
+        mkdir -p "${WORKSPACE}/${REPORTS_PATH}"
+        chmod a+rwx "${WORKSPACE}/${REPORTS_PATH}" || true
+
+    - name: Run Robot Framework
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.image }}
+        WORKSPACE: ${{ github.workspace }}
+        TESTS_PATH: ${{ inputs.tests_path }}
+        REPORTS_PATH: ${{ inputs.reports_path }}
+        ROBOT_OPTIONS: ${{ inputs.options }}
+        ROBOT_THREADS: ${{ inputs.threads }}
+        ROBOT_LISTENER: ${{ inputs.listener }}
+        PABOT_OPTIONS: ${{ inputs.pabot_options }}
+        SHM_SIZE: ${{ inputs.shm_size }}
+      run: |
+        set -euo pipefail
+
+        echo "Pulling ${IMAGE}"
+        docker pull "${IMAGE}"
+
+        echo "Running tests from /github/workspace/${TESTS_PATH}"
+        docker run --rm \
+          --shm-size="${SHM_SIZE}" \
+          -v "${WORKSPACE}:/github/workspace" \
+          -e "ROBOT_TESTS_DIR=/github/workspace/${TESTS_PATH}" \
+          -e "ROBOT_REPORTS_DIR=/github/workspace/${REPORTS_PATH}" \
+          -e "ROBOT_OPTIONS=${ROBOT_OPTIONS}" \
+          -e "ROBOT_THREADS=${ROBOT_THREADS}" \
+          -e "ROBOT_LISTENER=${ROBOT_LISTENER}" \
+          -e "PABOT_OPTIONS=${PABOT_OPTIONS}" \
+          "${IMAGE}"
