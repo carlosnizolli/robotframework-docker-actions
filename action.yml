@@ -69,6 +69,15 @@ runs:
         echo "Pulling ${IMAGE}"
         docker pull "${IMAGE}"
 
+        # Encaminha variáveis do step (ex.: GEMINI_API_KEY / GEMINI_MODEL do workflow)
+        # para o container somente quando estiverem definidas no runner.
+        EXTRA_ENV=()
+        for var in GEMINI_API_KEY GEMINI_MODEL; do
+          if [ -n "${!var:-}" ]; then
+            EXTRA_ENV+=(-e "${var}")
+          fi
+        done
+
         echo "Running tests from /github/workspace/${TESTS_PATH}"
         docker run --rm \
           --shm-size="${SHM_SIZE}" \
@@ -79,4 +88,5 @@ runs:
           -e "ROBOT_THREADS=${ROBOT_THREADS}" \
           -e "ROBOT_LISTENER=${ROBOT_LISTENER}" \
           -e "PABOT_OPTIONS=${PABOT_OPTIONS}" \
+          "${EXTRA_ENV[@]}" \
           "${IMAGE}"

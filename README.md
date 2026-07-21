@@ -14,6 +14,10 @@ jobs:
 
       - name: Run Robot Framework
         uses: carlosnizolli/robotframework-docker-actions@v1
+        env:
+          # Encaminhadas ao container quando definidas (ex.: Gemini)
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-flash-latest
         with:
           tests_path: tests
           reports_path: reports
