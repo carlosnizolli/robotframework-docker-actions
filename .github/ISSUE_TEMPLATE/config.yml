@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentação (README)
+    url: https://github.com/carlosnizolli/robotframework-docker-actions/blob/main/README.md
+    about: Uso da action, inputs, matrix jobs e variáveis Gemini
+  - name: Marketplace
+    url: https://github.com/marketplace/actions/robot-framework-docker
+    about: Versões publicadas da GitHub Action
+  - name: Imagem Docker (docker-robotframework)
+    url: https://github.com/carlosnizolli/docker-robotframework
+    about: Problemas na imagem, bibliotecas ou execução dentro do container

@@ -1,0 +1,103 @@
+name: Bug / Problema
+description: Problema ao usar a GitHub Action no workflow
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar. Preencha o máximo possível — facilita reproduzir o problema.
+        Action: `carlosnizolli/robotframework-docker-actions`
+        Imagem padrão: `ghcr.io/carlosnizolli/docker-robotframework`
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Onde ocorreu?
+      options:
+        - Checkout / preparação do workspace
+        - Pull da imagem Docker
+        - Execução do container (docker run)
+        - Inputs da action (tests_path, options, threads, etc.)
+        - Variáveis de ambiente (GEMINI_API_KEY, GEMINI_MODEL, etc.)
+        - Upload de artefatos / reports
+        - Outro
+    validations:
+      required: true
+
+  - type: input
+    id: action-version
+    attributes:
+      label: Versão da action
+      description: "Tag usada no uses:, ex.: v1.0.1"
+      placeholder: v1.0.1
+    validations:
+      required: true
+
+  - type: input
+    id: image-tag
+    attributes:
+      label: Tag da imagem Docker
+      description: "Input image ou default latest"
+      placeholder: ghcr.io/carlosnizolli/docker-robotframework:latest
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Trecho do workflow
+      description: Step que usa a action (redija secrets)
+      render: yaml
+      placeholder: |
+        - name: Run Robot Framework
+          uses: carlosnizolli/robotframework-docker-actions@v1.0.1
+          with:
+            tests_path: tests
+            reports_path: reports
+            options: "--exitonfailure"
+            threads: "1"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportamento atual
+      description: Inclua mensagens de erro relevantes
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs do job / stack trace
+      render: text
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Ambiente
+      description: "Runner, SO, arquitetura"
+      placeholder: |
+        - Runner: ubuntu-latest
+        - Arquitetura: amd64
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: Consultei o README (inputs, matrix jobs, variáveis Gemini)
+          required: false
+        - label: Verifiquei se o problema é da imagem Docker (docker-robotframework) e não desta action
+          required: false
+        - label: Não incluí secrets, tokens nem dados sensíveis neste issue
+          required: true
