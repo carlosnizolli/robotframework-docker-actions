@@ -56,7 +56,6 @@ body:
             tests_path: tests
             reports_path: reports
             options: "--exitonfailure"
-            threads: "1"
     validations:
       required: true
 

@@ -27,7 +27,6 @@ jobs:
           tests_path: tests
           reports_path: reports
           options: "--exitonfailure"
-          threads: "1"
 
       - name: Upload reports
         if: always()
@@ -65,7 +64,7 @@ Exemplo didático: [robotframework-gemini_exemplos](https://github.com/carlosniz
 
 ### Matrix jobs (recommended)
 
-Para paralelizar testes, prefira **vários jobs** com `strategy.matrix` — cada job roda `robot` com `threads: "1"`, isolado e com relatórios próprios:
+Para paralelizar testes, prefira **vários jobs** com `strategy.matrix` — cada job roda `robot` (padrão, sem Pabot), isolado e com relatórios próprios:
 
 ```yaml
 jobs:
@@ -87,7 +86,6 @@ jobs:
           tests_path: ${{ matrix.suite }}
           reports_path: reports/${{ matrix.suite }}
           options: "--exitonfailure"
-          threads: "1"
 
       - name: Upload reports
         if: always()
@@ -101,7 +99,7 @@ Também funciona com tags via `options`, por exemplo `--include smoke`.
 
 ### Pabot (discouraged)
 
-> **Desencorajado.** Prefira matrix jobs ou `threads: "1"` (execução sequencial com `robot`). O Pabot pode gerar instabilidade, conflitos de recursos e relatórios inconsistentes — use apenas se a suíte foi preparada para paralelismo.
+> **Desencorajado.** Prefira matrix jobs ou execução sequencial com `robot` (padrão). O Pabot pode gerar instabilidade, conflitos de recursos e relatórios inconsistentes — use apenas se a suíte foi preparada para paralelismo.
 
 ```yaml
 with:
